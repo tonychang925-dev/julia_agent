@@ -299,7 +299,101 @@ class CloseValidationResult:
     schema_version: str = "financial.f2.v1"
 
 
+@dataclass(frozen=True, slots=True)
+class TonyReviewInput:
+    review_id: str
+    validation_id: str
+    evaluation_id: str
+    action: str
+    reviewer_id: str
+    reason: str
+    override_type: str
+    proposed_text: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    review_timestamp: datetime
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class AnalystReviewRecord:
+    review_id: str
+    validation_id: str
+    evaluation_id: str
+    action: str
+    reviewer_id: str
+    reason: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    review_timestamp: datetime
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class OverrideLog:
+    override_id: str
+    evaluation_id: str
+    reviewer_id: str
+    override_type: str
+    original_status: str
+    override_text: str
+    reason: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    review_timestamp: datetime
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class NeedMoreEvidenceRequest:
+    request_id: str
+    validation_id: str
+    evaluation_id: str
+    question: str
+    reason: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    status: str
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class InvestorProfileUpdateProposal:
+    proposal_id: str
+    validation_id: str
+    evaluation_id: str
+    proposal_type: str
+    proposed_change: str
+    reason: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    status: str
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class FinancialReviewGovernanceDecision:
+    decision_id: str
+    review_id: str
+    decision: str
+    reason: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    schema_version: str = "financial.f3.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class TonyReviewResult:
+    result_id: str
+    validation_id: str
+    review_record: AnalystReviewRecord
+    governance_decision: FinancialReviewGovernanceDecision
+    override_log: OverrideLog | None
+    need_more_evidence_request: NeedMoreEvidenceRequest | None
+    profile_update_proposal: InvestorProfileUpdateProposal | None
+    evidence_refs: Tuple[EvidenceRef, ...]
+    generated_by: str
+    model_version: str
+    status: str
+    schema_version: str = "financial.f3.v1"
+
+
 __all__ = [
+    "AnalystReviewRecord",
     "AttentionView",
     "CandidateView",
     "CandidateTruth",
@@ -311,11 +405,15 @@ __all__ = [
     "EvidenceRef",
     "EventView",
     "FinancialBriefingBundle",
+    "FinancialReviewGovernanceDecision",
     "HypothesisView",
+    "InvestorProfileUpdateProposal",
     "InvestmentCase",
     "InvestmentCaseEvaluation",
     "MarketStateView",
     "MarketTruthSnapshot",
+    "NeedMoreEvidenceRequest",
+    "OverrideLog",
     "MarketThesisView",
     "PremarketResearchReport",
     "RiskStateView",
@@ -323,4 +421,6 @@ __all__ = [
     "StockAnalysisView",
     "ThemeAnalysisView",
     "ThemeView",
+    "TonyReviewInput",
+    "TonyReviewResult",
 ]
