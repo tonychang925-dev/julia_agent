@@ -207,3 +207,29 @@ reject
 - [x] Risk / Rollback / Non-Goals 完整。
 - [x] 已继承 F2 APPROVED WITH NOTES 治理备注。
 - [x] 已明确 F3 不产生正式交易、不写正式 Memory、不直接更新 profile。
+
+## 15. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F3 正确引入 Human-in-the-loop Analyst Governance。
+- Tony Review 是独立 Human Interpretation Layer，不修改 F2 Evaluation。
+- OverrideLog、Need Evidence Request、Profile Update Proposal 均保持 proposal/artifact 语义，不进入自动学习层。
+
+Required Notes before/during implementation:
+
+1. **OverrideLog 必须 immutable**：Tony 改变观点时产生新的 OverrideLog 版本，不覆盖历史。
+2. **Human Review 需要记录时间状态**：必须包含 `review_timestamp`，用于隔离 Tony 当时知道的信息，避免事后评论污染。
+3. **Investor Profile Update 必须是 Proposal**：F3 只生成 `InvestorProfileUpdateProposal`，不直接更新正式 profile。
+4. **Override 不进入正式 Memory**：F3 只产生 Review Artifact；未来进入 Analyst Memory 必须经过 F5 Governance Gate。
+5. **增加 Override Type 分类**：至少支持 `DIRECTION_CORRECTION/TIMING_CORRECTION/STOCK_SELECTION_CORRECTION/RISK_CORRECTION/INSUFFICIENT_EVIDENCE/NO_OVERRIDE`。
+
+Implementation order:
+
+1. `tests/test_financial_f3_tony_review.py` — 失败测试先行。
+2. Contracts：`TonyReviewInput`、`AnalystReviewRecord`、`OverrideLog`、`NeedMoreEvidenceRequest`、`InvestorProfileUpdateProposal`、`FinancialReviewGovernanceDecision`、`TonyReviewResult`。
+3. Governance policy：`runtime/capability/financial/governance/review_policy.py`。
+4. Workflow：`runtime/capability/financial/workflows/tony_review.py`。
+5. Boundary Audit：禁止 memory.write、strategy.update、trade、profile.update。
