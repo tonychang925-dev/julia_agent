@@ -21,3 +21,42 @@ audio/*.mp3
 
 # Local/private tool state
 .claude-dev/
+
+# Secrets / local credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*secret*
+*token*
+*credential*
+
+# Runtime state and private memory stay outside public repo
+memory/
+data/
+tmp/
+audio/
+
+# Local generated reports / binary caches
+.coverage
+htmlcov/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# Voice/model local assets
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.onnx
+*.pt
+*.pth
+*.safetensors
