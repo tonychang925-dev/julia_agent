@@ -218,17 +218,104 @@ class PremarketResearchReport:
     schema_version: str = "financial.f1.v1"
 
 
+@dataclass(frozen=True, slots=True)
+class CandidateTruth:
+    stock_code: str
+    stock_name: str
+    entry_condition_triggered: bool
+    confirmation_condition_triggered: bool
+    invalidation_condition_triggered: bool
+    risk_invalidated: bool
+    outcome: str
+    return_pct: float
+    evidence_refs: Tuple[EvidenceRef, ...]
+    schema_version: str = "financial.f2.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class MarketTruthSnapshot:
+    truth_snapshot_id: str
+    trade_date: date
+    as_of: datetime
+    market_close_state: str
+    risk_level: str
+    candidate_truths: Tuple[CandidateTruth, ...]
+    source_snapshot_ids: Tuple[str, ...]
+    evidence_refs: Tuple[EvidenceRef, ...]
+    producer_version: str
+    schema_version: str = "financial.f2.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class ErrorAttribution:
+    attribution_id: str
+    category: str
+    dimensions: Tuple[str, ...]
+    explanation: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    schema_version: str = "financial.f2.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class InvestmentCaseEvaluation:
+    evaluation_id: str
+    case_id: str
+    stock_code: str
+    status: str
+    thesis_validated: bool
+    trigger_validated: bool
+    risk_validated: bool
+    explanation: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    error_attribution: ErrorAttribution | None
+    schema_version: str = "financial.f2.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class CloseValidationSummary:
+    thesis_accuracy: float
+    trigger_accuracy: float
+    risk_accuracy: float
+    evaluation_count: int
+    evidence_refs: Tuple[EvidenceRef, ...]
+    schema_version: str = "financial.f2.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class CloseValidationResult:
+    validation_id: str
+    premarket_report_id: str
+    premarket_input_hash: str
+    source_bundle_id: str
+    source_snapshot_ids: Tuple[str, ...]
+    truth_snapshot_id: str
+    evaluations: Tuple[InvestmentCaseEvaluation, ...]
+    summary: CloseValidationSummary
+    evidence_refs: Tuple[EvidenceRef, ...]
+    generated_by: str
+    model_version: str
+    evaluator_version: str
+    status: str
+    schema_version: str = "financial.f2.v1"
+
+
 __all__ = [
     "AttentionView",
     "CandidateView",
+    "CandidateTruth",
+    "CloseValidationResult",
+    "CloseValidationSummary",
     "ConclusionWithEvidence",
     "EvidenceBundle",
+    "ErrorAttribution",
     "EvidenceRef",
     "EventView",
     "FinancialBriefingBundle",
     "HypothesisView",
     "InvestmentCase",
+    "InvestmentCaseEvaluation",
     "MarketStateView",
+    "MarketTruthSnapshot",
     "MarketThesisView",
     "PremarketResearchReport",
     "RiskStateView",
