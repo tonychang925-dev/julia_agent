@@ -1,0 +1,23 @@
+# OS / editor
+.DS_Store
+*.swp
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Runtime/generated data not part of doc initialization
+tmp/
+data/
+memory/*.jsonl
+audio/*.wav
+audio/*.mp3
+*.log
+
+# Local/private tool state
+.claude-dev/
