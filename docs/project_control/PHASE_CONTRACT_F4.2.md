@@ -394,3 +394,32 @@ After contract approval:
 Current status: `DESIGN DRAFT`
 
 Waiting for user review before F4.2 test-first implementation.
+
+## 18. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F4.2 正确引入 human-facing workbench interaction layer，但不把金融智能移动到 frontend。
+- `JuliaCopilot.tsx` 被定位为 Analyst Workbench 中的 interaction dock，不是独立 Chat UI 或第四业务栏。
+- `AnalystChatProtocol` 独立于 Python dataclass，保持 Web / Mobile / Voice / Avatar 后续入口的协议稳定性。
+- Acceptance Targets 覆盖 component mount、protocol parsing、WebSocket lifecycle、EvidenceRef rendering、limitations rendering 与 frontend boundary scan。
+
+Required Notes before/during implementation:
+
+1. **Frontend 只消费 ResponseEnvelope**：禁止 React 自己拼接 Julia 回答、Evidence、Risk；必须由 backend response envelope 提供内容，frontend 只 render。
+2. **EvidenceRefCard 不做解释**：允许展示 EvidenceRef id/title/source；不允许 React 自己生成“这个主题很强，因为...”等金融解释。
+3. **不要引入全局状态管理**：F4.2 V0.1 不引入 Redux/Zustand/MobX，除非现有 Workbench 已强制使用；优先 component state + websocket state。
+4. **UI 不持久化聊天历史**：不创建 chat history table，不写 localStorage permanent memory；F4.2 只展示当前交互。
+5. **Keep ResponseEnvelope stable**：WebSocket response protocol 必须兼容 F4.1 `AnalystResponseEnvelope` 字段，不重新设计 runtime output。
+
+Implementation order:
+
+1. `tests` / frontend test-first specs：component mount、protocol parsing、websocket mock、evidence render、limitations render、forbidden API scan。
+2. `frontend/types/analystChat.ts`。
+3. `frontend/services/analystChatClient.ts`。
+4. `frontend/components/JuliaCopilot/EvidenceRefCard.tsx`。
+5. `frontend/components/JuliaCopilot/JuliaMessage.tsx`。
+6. `frontend/components/JuliaCopilot/JuliaCopilot.tsx`。
+7. Run frontend tests and Python F0-F4 regression.
