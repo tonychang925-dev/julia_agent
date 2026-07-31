@@ -162,6 +162,7 @@ class InvestmentCase:
     model_version: str
     policy_versions: Mapping[str, str]
     status: str
+    case_type: str = "shadow_research"
     schema_version: str = "financial.f0.v1"
 
 
@@ -185,9 +186,42 @@ class FinancialBriefingBundle:
     schema_version: str = "financial.f0.v1"
 
 
+@dataclass(frozen=True, slots=True)
+class ConclusionWithEvidence:
+    conclusion_id: str
+    text: str
+    evidence_refs: Tuple[EvidenceRef, ...]
+    confidence: str = "medium"
+    schema_version: str = "financial.f1.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class PremarketResearchReport:
+    report_id: str
+    trade_date: date
+    as_of: datetime
+    market_summary: ConclusionWithEvidence
+    main_conflict: ConclusionWithEvidence
+    top_themes: Tuple[ThemeView, ...]
+    conditional_watchlist: Tuple[CandidateView, ...]
+    investment_cases: Tuple[InvestmentCase, ...]
+    risk_items: Tuple[ConclusionWithEvidence, ...]
+    forbidden_items: Tuple[ConclusionWithEvidence, ...]
+    auction_confirmation_points: Tuple[ConclusionWithEvidence, ...]
+    evidence_refs: Tuple[EvidenceRef, ...]
+    source_bundle_id: str
+    source_snapshot_ids: Tuple[str, ...]
+    input_hash: str
+    generated_by: str
+    model_version: str
+    status: str
+    schema_version: str = "financial.f1.v1"
+
+
 __all__ = [
     "AttentionView",
     "CandidateView",
+    "ConclusionWithEvidence",
     "EvidenceBundle",
     "EvidenceRef",
     "EventView",
@@ -196,6 +230,7 @@ __all__ = [
     "InvestmentCase",
     "MarketStateView",
     "MarketThesisView",
+    "PremarketResearchReport",
     "RiskStateView",
     "Scenario",
     "StockAnalysisView",
