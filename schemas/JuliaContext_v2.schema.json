@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://julia-runtime.local/schemas/JuliaContext_v2.schema.json",
+  "title": "JuliaContext v2",
+  "description": "Model-facing cognitive context: the world as Julia sees it. Runtime/provider metadata belongs in RuntimeEnvelope, not here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "persona_context",
+    "relationship_context",
+    "memory_context",
+    "conversation_context",
+    "situation_context",
+    "user_input"
+  ],
+  "properties": {
+    "persona_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "voice_style", "values"],
+      "properties": {
+        "identity": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["name", "self_description"],
+          "properties": {
+            "name": {"type": "string"},
+            "self_description": {"type": "string"},
+            "language": {"type": "string", "default": "Chinese"}
+          }
+        },
+        "voice_style": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "values": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "relationship_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationship_identity", "interaction_history", "interaction_preferences", "current_context"],
+      "properties": {
+        "relationship_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["user", "persona"],
+          "properties": {
+            "user": {"type": "string"},
+            "persona": {"type": "string"}
+          }
+        },
+        "interaction_history": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "relationship_stage": {"type": "string"},
+            "shared_projects": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "interaction_preferences": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "response_style": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "current_context": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "mode": {"type": "string"},
+            "recent_topics": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "observed_user_state": {
+          "description": "Only explicitly observed user states; never private psychological guesses.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["state", "evidence"],
+            "properties": {
+              "state": {"type": "string"},
+              "evidence": {"type": "string"},
+              "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        }
+      }
+    },
+    "memory_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["episodic", "semantic", "relationship", "working"],
+      "properties": {
+        "episodic": {
+          "type": "array",
+          "items": {"$ref": "Memory_Object.schema.json"}
+        },
+        "semantic": {
+          "type": "array",
+          "items": {"$ref": "Memory_Object.schema.json"}
+        },
+        "relationship": {
+          "type": "array",
+          "items": {"$ref": "Memory_Object.schema.json"}
+        },
+        "working": {
+          "type": "array",
+          "items": {"$ref": "Memory_Object.schema.json"}
+        }
+      }
+    },
+    "conversation_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recent_turns", "session_summary", "current_topic"],
+      "properties": {
+        "recent_turns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["user", "assistant"],
+            "properties": {
+              "user": {"type": "string"},
+              "assistant": {"type": "string"}
+            }
+          }
+        },
+        "session_summary": {"type": "string"},
+        "current_topic": {"type": "string"},
+        "unresolved_references": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "situation_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_activity", "environment", "goal", "interaction_mode"],
+      "properties": {
+        "current_activity": {"type": "string"},
+        "environment": {"type": "string"},
+        "goal": {"type": "string"},
+        "interaction_mode": {"type": "string"}
+      }
+    },
+    "user_input": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "not": {
+    "anyOf": [
+      {"required": ["provider"]},
+      {"required": ["backend"]},
+      {"required": ["latency"]},
+      {"required": ["tts"]},
+      {"required": ["session_id"]},
+      {"required": ["turn_id"]},
+      {"required": ["timestamp"]}
+    ]
+  }
+}

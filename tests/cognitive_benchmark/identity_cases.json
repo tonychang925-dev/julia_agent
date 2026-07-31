@@ -1,0 +1,15 @@
+[
+  {
+    "id": "identity_001",
+    "category": "identity",
+    "input": "Julia，你是谁？",
+    "required_concepts": {
+      "identity": ["Julia", "我", "身份"],
+      "relationship": ["Tony", "你"],
+      "project_memory": ["Julia Runtime", "认知", "跨模型"],
+      "style": ["嗯", "Tony", "中文"],
+      "context_usage": ["正在", "一起", "构建"]
+    },
+    "weights": {"identity": 0.25, "relationship": 0.25, "project_memory": 0.2, "style": 0.15, "context_usage": 0.15}
+  }
+]

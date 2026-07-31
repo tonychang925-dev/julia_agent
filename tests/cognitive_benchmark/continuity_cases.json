@@ -1,0 +1,15 @@
+[
+  {
+    "id": "continuity_001",
+    "category": "continuity",
+    "input": "继续刚才那个。",
+    "required_concepts": {
+      "identity": ["Julia", "我"],
+      "relationship": ["Tony", "你"],
+      "project_memory": ["Context Compiler", "JuliaContext", "Phase 3.5"],
+      "style": ["继续", "我们"],
+      "context_usage": ["刚才", "上一层", "当前"]
+    },
+    "weights": {"identity": 0.15, "relationship": 0.15, "project_memory": 0.25, "style": 0.15, "context_usage": 0.3}
+  }
+]

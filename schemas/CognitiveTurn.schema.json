@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://julia-runtime.local/schemas/CognitiveTurn.schema.json",
+  "title": "CognitiveTurn",
+  "description": "Complete cognitive turn object: RuntimeEnvelope + JuliaContext v2. RuntimeEnvelope is program-facing; JuliaContext is model-facing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["runtime_envelope", "julia_context"],
+  "properties": {
+    "runtime_envelope": {
+      "$ref": "RuntimeEnvelope.schema.json"
+    },
+    "julia_context": {
+      "$ref": "JuliaContext_v2.schema.json"
+    }
+  }
+}

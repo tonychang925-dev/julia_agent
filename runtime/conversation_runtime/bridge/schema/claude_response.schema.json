@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Julia Claude Code Handoff Response",
+  "type": "object",
+  "required": ["session_id", "turn_id", "status", "text"],
+  "properties": {
+    "session_id": {"type": "string", "minLength": 1},
+    "turn_id": {"type": "integer", "minimum": 1},
+    "status": {"type": "string", "enum": ["success", "error"]},
+    "text": {"type": "string"},
+    "reason": {"type": "string"},
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": false
+}

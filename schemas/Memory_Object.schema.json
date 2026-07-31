@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://julia-runtime.local/schemas/Memory_Object.schema.json",
+  "title": "Julia Memory Object",
+  "description": "Structured memory object for Julia Runtime Memory Runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "summary", "importance", "source"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^memory_[A-Za-z0-9_-]+$"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["episodic", "semantic", "relationship", "working"]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event": {
+      "type": "string"
+    },
+    "fact": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "description": "ISO-8601 timestamp or date when known."
+    },
+    "participants": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "topics": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "importance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["emotional", "relationship", "technical", "recurrence"],
+      "properties": {
+        "emotional": {"type": "number", "minimum": 0, "maximum": 1},
+        "relationship": {"type": "number", "minimum": 0, "maximum": 1},
+        "technical": {"type": "number", "minimum": 0, "maximum": 1},
+        "recurrence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "emotional_weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "locator"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["claude_diary", "voice_runtime", "conversation", "reflection", "manual"]
+        },
+        "locator": {"type": "string"},
+        "excerpt": {"type": "string"}
+      }
+    },
+    "retrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "embedding_id": {"type": "string"},
+        "rank_score": {"type": "number"},
+        "last_retrieved_at": {"type": "string"},
+        "retrieval_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {"type": "string"},
+        "updated_at": {"type": "string"},
+        "expires_at": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["active", "working", "archived", "superseded"]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"type": {"const": "episodic"}}},
+      "then": {"anyOf": [{"required": ["event"]}, {"required": ["summary"]}]}
+    },
+    {
+      "if": {"properties": {"type": {"const": "semantic"}}},
+      "then": {"anyOf": [{"required": ["fact"]}, {"required": ["summary"]}]}
+    }
+  ]
+}

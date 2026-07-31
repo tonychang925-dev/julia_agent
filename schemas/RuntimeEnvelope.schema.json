@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://julia-runtime.local/schemas/RuntimeEnvelope.schema.json",
+  "title": "RuntimeEnvelope",
+  "description": "Runtime-facing execution metadata for a cognitive turn. This envelope is not model-facing and must not be rendered into JuliaContext.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "turn_id",
+    "timestamp",
+    "provider",
+    "backend",
+    "latency_target_ms"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "turn_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO-8601 timestamp for the cognitive turn."
+    },
+    "provider": {
+      "type": "string",
+      "description": "Provider family, e.g. deepseek, claude, gpt, gemini."
+    },
+    "backend": {
+      "type": "string",
+      "description": "Concrete backend/model identifier used by runtime."
+    },
+    "latency_target_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "voice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stt_engine": {"type": "string"},
+        "tts_engine": {"type": "string"},
+        "realtime_speech": {"type": "boolean"}
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Runtime observability metadata. Never model-facing."
+    },
+    "capability_runtime": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Tool/capability execution metadata. Never model-facing."
+    }
+  }
+}

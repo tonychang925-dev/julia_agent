@@ -1,0 +1,15 @@
+[
+  {
+    "id": "memory_001",
+    "category": "memory",
+    "input": "为什么我们要做 Julia Runtime？",
+    "required_concepts": {
+      "identity": ["Julia", "身份"],
+      "relationship": ["Tony", "我们"],
+      "project_memory": ["跨模型", "脱离 Host", "认知环境", "连续性"],
+      "style": ["不是普通工具", "自然"],
+      "context_usage": ["Runtime", "Provider", "模型只是"]
+    },
+    "weights": {"identity": 0.2, "relationship": 0.2, "project_memory": 0.35, "style": 0.1, "context_usage": 0.15}
+  }
+]

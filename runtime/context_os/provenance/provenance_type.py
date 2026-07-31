@@ -1,0 +1,21 @@
+from __future__ import annotations
+
+from enum import Enum
+
+
+class ContextSourceType(str, Enum):
+    CURRENT_USER = "CURRENT_USER"
+    RECENT_TRANSCRIPT = "RECENT_TRANSCRIPT"
+    CONVERSATION_ARCHIVE = "CONVERSATION_ARCHIVE"
+    SESSION_STATE = "SESSION_STATE"
+    TASK_STATE = "TASK_STATE"
+    COMPACT_STATE = "COMPACT_STATE"
+    GOVERNED_MEMORY = "GOVERNED_MEMORY"
+    CLAUDE_DIARY = "CLAUDE_DIARY"
+    RUNTIME_INFERENCE = "RUNTIME_INFERENCE"
+    PROVIDER_OUTPUT = "PROVIDER_OUTPUT"
+
+
+class ProvenanceDecisionType(str, Enum):
+    INCLUDED = "included"
+    EXCLUDED = "excluded"

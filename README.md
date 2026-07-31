@@ -44,6 +44,38 @@ Permanently isolated cognitive layers:
 
 This separation is required so Julia Agent can prove capability parity or superiority without depending on Claude's native cognitive system.
 
+
+## Domain Architecture Position
+
+`julia_agent` is a **general-purpose Agent Runtime architecture**, not a financial-only application.
+
+The runtime-owned cognitive architecture is designed to host multiple domain capabilities behind governed contracts:
+
+```text
+Julia Agent Runtime
+  ├── Identity OS
+  ├── Memory OS
+  ├── Context OS
+  ├── Action Governance
+  ├── Capability Router
+  ├── Provider Adaptation
+  └── Domain Capability Providers
+        ├── financial/        # first domain: Julia Financial Analyst
+        ├── healthcare/       # future possible domain
+        ├── coding/           # future possible domain
+        └── personal_assist/  # future possible domain
+```
+
+The financial analyst work is the first production domain integration. It must not become a second Context OS, Memory OS, or Agent Runtime. Financial modules provide domain facts, typed contracts, EvidenceRef-backed reports, and governed workflows; Julia Context OS remains the single authority for model-facing context selection, budget, provenance, and projection.
+
+Core principle:
+
+```text
+One Julia Cognitive Runtime.
+Many domain capability providers.
+No domain-specific duplicate Agent OS.
+```
+
 ## Evolution Tracks
 
 ```text
@@ -73,20 +105,26 @@ A model-independent AI Persona Runtime for loading Julia as an external identity
 
 ```text
 julia_agent/
-├── identity/
-│   ├── julia_identity.yaml
-│   ├── personality.md
-│   └── values.md
-├── memory/
-│   ├── relationship_memory.jsonl
-│   ├── episodic_memory.jsonl
-│   └── important_events.md
-├── runtime/
-│   ├── agent.py
-│   ├── memory_loader.py
-│   └── context_builder.py
-└── README.md
+├── docs/                         # architecture, phase contracts, reports
+├── runtime/                      # generic Julia Agent Runtime
+│   ├── context_os/               # governed context lifecycle
+│   ├── cognitive/                # cognitive projection/provider adaptation
+│   ├── memory_loader.py          # memory loading boundary
+│   ├── action/                   # action governance and loop runtime
+│   ├── capability/               # capability contracts/providers
+│   │   └── financial/            # first domain capability provider
+│   ├── conversation_runtime/     # realtime/text conversation runtime
+│   ├── conversation_archive/     # transcript/archive utilities
+│   └── voice_validation/         # voice/runtime validation
+├── frontend/                     # JuliaCopilot workbench entry
+├── schemas/                      # public runtime schemas
+├── scripts/                      # operational scripts without local secrets
+├── stt/                          # speech-to-text adapters
+├── tts/                          # text-to-speech adapters
+└── tests/                        # regression and phase acceptance tests
 ```
+
+Private runtime data stays outside the public repository: `identity/`, `memory/`, `data/`, `tmp/`, and `audio/`.
 
 ## Run
 

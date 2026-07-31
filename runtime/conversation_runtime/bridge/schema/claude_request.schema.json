@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Julia Claude Code Handoff Request",
+  "type": "object",
+  "required": ["session_id", "turn_id", "timestamp", "text", "backend"],
+  "properties": {
+    "session_id": {"type": "string", "minLength": 1},
+    "turn_id": {"type": "integer", "minimum": 1},
+    "timestamp": {"type": "string", "minLength": 1},
+    "text": {"type": "string"},
+    "backend": {"type": "string", "const": "claude_code"},
+    "correlation_id": {"type": "string"},
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": false
+}
