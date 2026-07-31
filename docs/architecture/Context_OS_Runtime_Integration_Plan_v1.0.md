@@ -428,3 +428,61 @@ docs/architecture/Context_OS_Runtime_Integration_Plan_v1.0.md
 ```
 
 No runtime behavior changes should occur in this contract phase.
+
+## 14. Approval Notes
+
+Decision:
+
+```text
+APPROVED WITH NOTES
+```
+
+Approved:
+
+- Runtime owns runtime lifecycle;
+- Context OS owns context lifecycle;
+- session references ContextRuntime rather than creating one Context OS per session;
+- dependency injection boundary;
+- provider registry boundary;
+- structured error handling;
+- shutdown behavior;
+- regression gates;
+- documentation-only scope.
+
+Notes:
+
+1. **Runtime must not become a hidden Context Authority.**
+
+   Runtime owns execution and lifecycle. It must not mutate `ContextBlock` content, reinterpret evidence, or decide domain truth.
+
+   ```text
+   Runtime owns execution.
+   Context OS owns context.
+   Domain Provider owns facts/evidence.
+   ```
+
+2. **Provider Registry is not Domain Router reasoning.**
+
+   Provider Registry may perform provider lookup and availability coordination. It must not decide which domain answer is better, rank domain truth, or perform intelligent provider selection reasoning.
+
+   ```text
+   Provider Registry = lookup / lifecycle boundary
+   Provider Registry ≠ reasoning engine
+   ```
+
+Recommended next phase:
+
+```text
+A2.2.1 — Runtime Integration Skeleton
+```
+
+Recommended minimal implementation shape:
+
+```text
+runtime/core/runtime/
+  lifecycle.py
+  session_manager.py
+  context_runtime.py
+```
+
+A2.2.1 must continue to exclude Financial Provider, Memory, Identity, LLM, Prompt Builder, UI, and Voice.
