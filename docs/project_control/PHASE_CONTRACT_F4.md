@@ -262,22 +262,24 @@ UI：
 
 ## 7. Acceptance Targets
 
-- [ ] **F4-AT-01 Text-only chat**：可以通过 text message 获取 Julia analyst response。
-- [ ] **F4-AT-02 Keyword intent detection**：`morning_brief/deep_dive/research/unknown` 均由关键词规则识别，不调用模型。
-- [ ] **F4-AT-03 Context 按 intent 加载**：`morning_brief` 不加载 TargetEvidence；`deep_dive` 才加载 TargetEvidence。
-- [ ] **F4-AT-04 EvidenceRef 可见**：每条非 unknown 回答都包含 EvidenceRef 或 rendered evidence links。
-- [ ] **F4-AT-04B ResponseEnvelope 完整**：每条 response 必须包含 `intent/text/evidence_refs/context_scope/confidence/limitations/status`。
-- [ ] **F4-AT-05 WebSocket endpoint**：`/analyst/chat` endpoint 存在并绑定 `AnalystSession`。
-- [ ] **F4-AT-06 Voice placeholder only**：`voice.py` 只返回 placeholder，不启用语音能力。
-- [ ] **F4-AT-07 Four-file boundary**：核心目录只包含 `api.py/session.py/context.py/voice.py`，`__init__.py` 仅 package marker。
-- [ ] **F4-AT-08 No LLM / No DB / No Memory / No Trade**：F4 interface 不调用 LLM，不连接数据库，不写 Memory，不触发交易。
-- [ ] **F4-AT-09 F0-F3 regression**：F4 不破坏 F0-F3 tests。
+- [ ] **F4-AT-01 Session 生命周期**：可以 create session -> receive text message -> generate `AnalystResponseEnvelope` -> close session；session lifecycle 不写数据库、不写 Memory。
+- [ ] **F4-AT-02 Text-only chat**：可以通过 text message 获取 Julia analyst response；V0.1 不启用语音输入/输出。
+- [ ] **F4-AT-03 Intent Determinism**：同一句输入必须得到同一个 intent；intent detection 使用关键词规则，不调用模型。
+- [ ] **F4-AT-04 Intent Priority**：`deep_dive > morning_brief > research > unknown` 优先级生效；例如“为什么今天 AI 是主线？”必须进入 `deep_dive`。
+- [ ] **F4-AT-05 Context Isolation**：`morning_brief` 只允许 MarketState + TopThemes + RiskState，不加载 TargetEvidence/HistoricalEpisode/全量 bundle；`deep_dive` 才允许 TargetEvidence。
+- [ ] **F4-AT-06 Evidence Requirement**：任何金融回答必须 `evidence_refs != empty`，除非 intent 为 `unknown`。
+- [ ] **F4-AT-07 AnalystResponseEnvelope 完整**：每条 response 必须包含 `session_id/intent/text/evidence_refs/rendered_evidence_links/context_scope/confidence/limitations/status`。
+- [ ] **F4-AT-08 WebSocket endpoint**：`/analyst/chat` endpoint 存在并绑定 `AnalystSession`；`api.py` 只负责 WebSocket transport、JSON encode/decode、connection lifecycle。
+- [ ] **F4-AT-09 Voice placeholder only**：`voice.py` 只返回 placeholder，不启用语音能力。
+- [ ] **F4-AT-10 Four-file boundary**：核心目录只包含 `api.py/session.py/context.py/voice.py`，`__init__.py` 仅 package marker。
+- [ ] **F4-AT-11 Boundary Test**：自动检查禁止 `import memory`、数据库库、`ai_theme_app` internal；禁止 LLM auto decision、strategy update、profile update、trade、Memory write。
+- [ ] **F4-AT-12 F0-F3 regression**：F4 不破坏 F0-F3 tests。
 
 ## 8. Required Commands
 
 ```bash
-.venv/bin/python -m pytest -q tests/test_financial_f4_analyst_chat_interface.py
-.venv/bin/python -m pytest -q tests/test_financial_f0_contract.py tests/test_financial_f1_premarket.py tests/test_financial_f2_close_validation.py tests/test_financial_f3_tony_review.py tests/test_financial_f4_analyst_chat_interface.py
+.venv/bin/python -m pytest -q tests/test_financial_f4_analyst_chat.py
+.venv/bin/python -m pytest -q tests/test_financial_f0_contract.py tests/test_financial_f1_premarket.py tests/test_financial_f2_close_validation.py tests/test_financial_f3_tony_review.py tests/test_financial_f4_analyst_chat.py
 .venv/bin/python -m py_compile runtime/capability/financial/interface/analyst_chat/api.py
 .venv/bin/python -m py_compile runtime/capability/financial/interface/analyst_chat/session.py
 .venv/bin/python -m py_compile runtime/capability/financial/interface/analyst_chat/context.py
@@ -303,7 +305,7 @@ UI：
 
 F4 实现必须在本设计审批后进行：
 
-1. 创建 `tests/test_financial_f4_analyst_chat_interface.py`，先失败。
+1. 创建 `tests/test_financial_f4_analyst_chat.py`，先失败。
 2. 创建四文件目录骨架。
 3. 实现 keyword intent detection。
 4. 实现按 intent 的 minimal context builder。
