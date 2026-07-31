@@ -266,3 +266,39 @@ tmp/runtime_boundary_inventory.json
 ```
 
 It is intentionally not committed to `main` because it is an audit working artifact.
+
+## 13. Approval Notes
+
+Decision:
+
+```text
+APPROVED WITH NOTES
+```
+
+Approved:
+
+- Runtime classification model;
+- Julia Core boundary;
+- Domain Provider boundary;
+- Application Surface boundary;
+- Runtime Artifact boundary;
+- Private data isolation;
+- `main` as Frozen Production Baseline;
+- `codex/full-agent-architecture-migration` as evaluation-only branch.
+
+Constraints:
+
+- Audit does not imply migration;
+- no code migration happened in A1;
+- no runtime behavior changed in A1;
+- full runtime migration branch remains `DO NOT MERGE`;
+- future migration requires A2-A4 contracts;
+- `tmp/runtime_boundary_inventory.json` remains a local audit artifact and is not source of truth.
+
+Recommended next phase:
+
+```text
+A2.0 — Context OS Core Migration Contract
+```
+
+A2.0 must be contract-first. It must define Context OS ownership, dependency direction, migration boundaries, and forbidden dependencies before moving any runtime code.
