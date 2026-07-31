@@ -114,3 +114,45 @@ This proves Financial Provider is not required for Julia Core Context OS to exis
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 8. Approval Notes
+
+Decision:
+
+```text
+APPROVED WITH NOTES
+```
+
+Approved:
+
+- Core import without Domain Provider;
+- empty provider environment;
+- mock provider only;
+- provider replacement;
+- dependency isolation;
+- ContextBlock lifecycle separation from Memory;
+- `CORE_RUNTIME_STATUS.md` as future baseline.
+
+Notes:
+
+1. **Provider Interface is the only extension point.**
+
+   Future domains must integrate through:
+
+   ```text
+   Domain Provider -> Provider Interface -> Context OS
+   ```
+
+   Domains must not import or mutate `runtime/core/context_os` internals directly.
+
+2. **Independence Verification is a regression gate.**
+
+   `tests/test_a215_core_independence.py` becomes a mandatory architecture boundary regression for future work touching Context OS, Provider Interface, Domain Binding, or Workbench Context Actions.
+
+Recommended next phase:
+
+```text
+A2.2 — Context OS Runtime Integration
+```
+
+A2.2 should connect the independent Core Context OS to Julia runtime lifecycle without adding domain logic, financial binding, memory content, UI, or voice.
