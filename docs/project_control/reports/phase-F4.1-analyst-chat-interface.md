@@ -77,3 +77,27 @@
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 7. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F4.1 成功建立 Julia Financial Analyst 的稳定 Human Interaction Boundary。
+- F0-F4 全链路回归通过，证明 Interaction Layer 未破坏金融能力边界、研究层、评价层与治理层。
+- `AnalystResponseEnvelope` 已提供 `EvidenceRefs + Context Scope + Limitations`，让 Julia 的回答成为可审计分析接口，而不是普通聊天输出。
+- `api.py/session.py/context.py/voice.py` 四文件边界满足 V0.1 contract。
+
+Merge Notes:
+
+1. **F4.1 是 Interface Layer，不是 Intelligence Layer**：F0-F3 是 reasoning capability，F4 是 access layer；不得在 F4 增加金融判断逻辑。
+2. **ResponseEnvelope 是长期协议**：未来 Web Chat、Voice、Avatar、Mobile App 都应复用 `AnalystResponseEnvelope`，不要每个入口重新设计输出格式。
+3. **Context Scope 必须继续收紧**：`Intent first, Context second, Evidence always` 继续作为 Julia Runtime 交互原则。
+4. **Voice 延后**：F4.1 text-only 正确；语音应作为单独 `F4.3 Voice Interaction` 或 voice adapter phase。
+5. **UI 单独拆 Phase**：React 面板不混入 F4.1；后续单独进入 `F4.2 Analyst Workbench UI Integration`。
+
+Recommended next phase:
+
+- **F4.2 — Analyst Workbench UI Integration**
+- Objective: 将 Julia 接入现有 AI Theme App 分析师工作台，通过 `JuliaCopilot.tsx -> WebSocket -> analyst_chat/api.py -> Julia Runtime` 完成最小文本面板。
