@@ -239,3 +239,29 @@ Markdown 必须包含：
 - [x] 已引用 `docs/project_control/EXECUTION_GUARDRAILS.md`。
 - [x] 已继承 F0 APPROVED WITH NOTES 治理备注。
 - [x] 已明确 F1 不产生正式交易决策。
+
+## 15. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F1 正确从 F0 金融能力边界扩展到 Shadow Morning Analyst 工作流。
+- F1 仍保持市场认知读取与研究报告生成层，不进入交易系统。
+- F1 明确生成 `PremarketResearchReport` 与 Markdown《Julia 盘前研究》，但不产生正式推荐、不触发交易、不写入正式金融记忆。
+
+Required Notes before/during implementation:
+
+1. **F1 Workflow 必须保持 deterministic**：`run_premarket_research(bundle, generated_by="julia_financial_shadow", model_version="deterministic_f1")` 必须是 `Input Bundle -> Deterministic Transformation -> Research Report`，不得依赖在线 LLM、实时新闻搜索或随机采样。
+2. **InvestmentCase 不允许出现交易动作词**：禁止 `buy/sell/open_position/close_position/order/execute`；允许 `observe/monitor/validate/confirm/invalidate`。
+3. **Renderer 不应生成荐股语言**：禁止“今日推荐股票”等表达；允许“今日条件观察标的”。
+4. **增加 Snapshot Identity**：F1 报告应在 `source_bundle_id`、`source_snapshot_ids` 基础上增加 `input_hash`，用于 replay、回测、错误归因和模型比较。
+5. **F1 不连接真实市场**：F1 使用冻结 fixture，不依赖真实当天行情或真实数据库；真实接入应作为后续 `F1.5 Real Data Adapter Spike` 单独处理。
+
+Implementation order:
+
+1. `tests/test_financial_f1_premarket.py` — 12 个失败测试先行。
+2. `PremarketResearchReport` / `ReportSection` / `ConclusionWithEvidence` contracts。
+3. `runtime/capability/financial/workflows/premarket.py`。
+4. `runtime/capability/financial/rendering/report_renderer.py`。
+5. Boundary audit：无交易、无 memory 正式写入、无数据库、无策略修改。
