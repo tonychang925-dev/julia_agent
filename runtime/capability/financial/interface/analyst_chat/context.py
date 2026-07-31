@@ -1,4 +1,14 @@
-"""Intent-aware minimal context builder for F4 analyst chat."""
+"""Intent-aware minimal context selector for F4 analyst chat.
+
+Legacy V0.1 adapter.
+
+This module is a temporary selector for the text-only analyst_chat interface.
+It is not a Context OS implementation and must not evolve into a Financial
+Context Builder.
+
+Future replacement:
+    Julia Context OS -> FinancialDomainProvider -> ContextBlock candidates.
+"""
 
 from __future__ import annotations
 
