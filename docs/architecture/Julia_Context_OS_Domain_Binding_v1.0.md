@@ -392,6 +392,66 @@ This architecture freeze does not:
 - alter trading/financial decision boundaries;
 - approve any domain to bypass Julia Context OS.
 
+### 10.1 Context OS Non-Goals
+
+Julia Context OS does not own domain knowledge.
+
+It must not become:
+
+- a financial knowledge engine;
+- a stock scoring model;
+- a medical knowledge base;
+- a clinical reasoning engine;
+- a code analysis engine;
+- a domain-specific ranking/risk model.
+
+Context OS owns:
+
+```text
+what context is needed,
+which candidate blocks are allowed,
+how much context fits,
+which provenance is acceptable,
+how model-facing context is projected.
+```
+
+It does not own:
+
+```text
+financial facts,
+medical facts,
+code facts,
+domain scoring rules,
+domain evidence production.
+```
+
+### 10.2 Domain Provider Non-Goals
+
+Domain Providers do not own Julia cognition.
+
+They must not implement:
+
+- Context lifecycle;
+- Memory lifecycle;
+- Learning loop;
+- prompt assembly;
+- token budget;
+- Julia identity;
+- Julia action governance;
+- model-facing provider input construction.
+
+Domain Providers own:
+
+```text
+facts,
+evidence,
+domain object references,
+capability results,
+domain governance metadata.
+```
+
+They return candidate `ContextBlock` objects and evidence references. Julia Context OS decides whether, when, and how those candidates become model-facing context.
+
 ## 11. Acceptance Targets for F4.3-pre
 
 - [ ] Repository strategy distinguishes `main`, evaluation branch, and future core migration.
@@ -404,4 +464,3 @@ This architecture freeze does not:
 - [ ] F4.1 `context.py` is classified as temporary V0.1 adapter.
 - [ ] ADR-001 / ADR-002 / ADR-003 are created.
 - [ ] No runtime implementation changes are introduced in this phase.
-
