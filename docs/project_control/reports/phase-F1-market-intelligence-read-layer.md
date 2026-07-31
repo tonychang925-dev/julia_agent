@@ -94,3 +94,29 @@
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 7. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F1 成功从 F0 Contract Boundary 扩展到 deterministic Shadow Morning Analyst workflow。
+- F0 Contract 未被破坏，F0+F1 回归通过。
+- `PremarketResearchReport` 成为 Julia Financial Analyst 第一个正式结构化输出对象。
+- EvidenceRef 已覆盖 Market State、Theme、Candidate、InvestmentCase 与 Risk。
+- `InvestmentCase.case_type="shadow_research"` 避免与 Trade Signal 混淆。
+- `input_hash` 已为 F2/F5 的 replay、回测、错误归因和模型比较建立基础。
+
+Merge Notes:
+
+1. **保持 deterministic evidence-first architecture**：未来接入 DeepSeek/GPT 时，不得替换 deterministic premarket workflow；应新增 Analyst Reasoning / Explanation Layer，保持 `Deterministic Evidence Layer + LLM Explanation Layer` 的方向。
+2. **Shadow 状态继续冻结**：F1/F2/F3 前，所有 `InvestmentCase`、`Report`、`Thesis` 只能是 `draft` 或 `shadow`，禁止 `approved/active/executed`。
+3. **Renderer 是展示层，不是决策层**：`report_renderer.py` 只负责 `Object -> Markdown`，不得加入排名逻辑、推荐逻辑或风险判断。
+4. **为 F2 留接口，不重新设计**：F2 应复用 F1 的 `input_hash`、`source_snapshot_ids`、`EvidenceRef`、`InvestmentCase` 作为输入，不重新设计 F1 输出对象。
+
+Recommended next phase:
+
+- **F2 — Market Feedback & Analyst Review Layer**
+- Objective: 让 Julia 第一次拥有“昨天说了什么、今天结果如何、为什么正确、为什么错误”的反馈评价能力。
+- Core flow: `PremarketResearchReport -> MarketTruthSnapshot -> Evaluation -> ErrorAttribution`。
