@@ -107,3 +107,28 @@ TonyReviewResult
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 7. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F3 成功建立 Tony ↔ Julia 的 Human-in-the-loop Governance Layer。
+- F0/F1/F2/F3 全链路回归通过，证明 Contract Boundary、Research Layer、Evaluation Layer、Governance Layer 兼容。
+- `OverrideLog` 保持独立 immutable artifact，不修改 F2 `CloseValidationResult`。
+- `InvestorProfileUpdateProposal` 保持 proposal-only，不直接更新正式 profile。
+- `NeedMoreEvidenceRequest` 保持 draft/proposal，不自动执行真实查询。
+
+Merge Notes:
+
+1. **Override 不等于 Correction**：OverrideLog 是 Human Interpretation Layer，不是 AI Error Fix Patch；Julia 与 Tony 的差异可能来自观察周期、证据权重或评价维度不同。
+2. **Governance Decision 必须可追溯**：长期保持 `Review Input + EvidenceRefs + Decision + Reviewer + Timestamp` 的完整审计链。
+3. **Proposal 不进入 Memory**：F3 artifact 需经未来 F5 Governance Gate 后才可进入 Analyst Memory；不得提前写入 Julia Personality Memory 或正式金融记忆。
+4. **为 F4/F5 保留接口**：F3 的 Research + Evaluation + Human Feedback 将作为 F5 Analyst Learning 的输入基础；F4 应只增加交互入口，不增加金融判断能力。
+
+Recommended next phase:
+
+- **F4 — Julia Analyst Interaction Layer**
+- Objective: 将 Julia Financial Analyst 从后台能力连接到 Analyst Workbench，为 Tony 提供对话、上下文选择、Evidence 展示与 analyst workflow 入口。
+- Core flow: `Analyst Workbench -> Julia Interaction Gateway -> Context Builder -> Julia Runtime -> Financial Capability`。
