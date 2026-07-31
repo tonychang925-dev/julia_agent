@@ -60,3 +60,8 @@ htmlcov/
 *.pt
 *.pth
 *.safetensors
+
+# Frontend dependencies/build outputs
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
