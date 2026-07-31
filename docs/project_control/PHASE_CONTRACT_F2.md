@@ -219,3 +219,29 @@ INSUFFICIENT_DATA
 - [x] Risk / Rollback / Non-Goals 完整。
 - [x] 已继承 F1 APPROVED WITH NOTES 治理备注。
 - [x] 已明确 F2 不产生正式交易决策、不写正式 Memory。
+
+## 15. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F2 正确引入 Analyst Feedback Loop：从“产生研究观点”进入“评价研究观点”。
+- F2 基于 F1 `PremarketResearchReport`、`InvestmentCase`、`input_hash`、`source_snapshot_ids` 与 EvidenceRef 链路，不重新设计 F1 输出对象。
+- F2 明确保持 Shadow Analyst：不产生交易、不修改策略、不写正式金融知识库。
+
+Required Notes before/during implementation:
+
+1. **Error Attribution 不允许修改原 Thesis**：F1 Frozen Thesis 与 F2 Attribution 必须分离，禁止 F2 回写或修订 F1 report/case。
+2. **MarketTruthSnapshot 必须来源于外部事实**：F2 不允许由 LLM 判断市场真实结果；truth producer 必须外部化，F2 只消费冻结 truth snapshot。
+3. **Accuracy Metrics 必须可重算**：不要只存总分；必须保留 case evaluations，由 evaluations 推导 metrics。
+4. **Error Attribution 进入未来 Memory 前需要 Gate**：F2 只生成 shadow evaluation artifact；未来进入 Analyst Performance Memory 必须经过 Review、Approval、Replay。
+5. **CloseValidationResult 增加 evaluator_version**：例如 `deterministic_f2_v1`，用于未来评价规则变更追踪。
+6. **F2 不接真实市场数据库**：真实接入应作为 `F2.5 Market Truth Adapter Spike` 单独处理。
+
+Implementation order:
+
+1. `tests/test_financial_f2_close_validation.py` — 12 个失败测试先行。
+2. Contracts：`MarketTruthSnapshot`、`CandidateTruth`、`InvestmentCaseEvaluation`、`ErrorAttribution`、`CloseValidationSummary`、`CloseValidationResult`。
+3. Workflow：`runtime/capability/financial/workflows/close_review.py`。
+4. Boundary Audit：禁止 memory write、strategy update、trade、database。
