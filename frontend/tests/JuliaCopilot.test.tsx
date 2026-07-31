@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { EvidenceRefCard } from '../components/JuliaCopilot/EvidenceRefCard';
 import { JuliaCopilot } from '../components/JuliaCopilot/JuliaCopilot';
@@ -32,7 +32,7 @@ describe('F4.2 JuliaCopilot', () => {
     render(<JuliaCopilot wsUrl="ws://fixture" tradeDate="2026-07-31" client={client} />);
     fireEvent.change(screen.getByPlaceholderText('Ask Julia about the market...'), { target: { value: '今天怎么看AI' } });
     fireEvent.click(screen.getByText('Send'));
-    expect(client.send).toHaveBeenCalledWith(expect.objectContaining({ type: 'message' }));
+    expect(client.sentMessages?.[0]).toEqual(expect.objectContaining({ type: 'message' }));
     await waitFor(() => expect(screen.getByText('今天AI方向处于研究观察。')).toBeInTheDocument());
   });
 
