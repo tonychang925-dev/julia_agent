@@ -92,3 +92,54 @@ A2.1 的目标是建立最小 Julia Core Context OS runtime skeleton，证明 Ju
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 8. Approval Notes
+
+Decision:
+
+```text
+APPROVED WITH NOTES
+```
+
+Approved:
+
+- Minimal `runtime/core/context_os/` skeleton;
+- `runtime/core/providers/` provider interface boundary;
+- test-first sequence;
+- no domain dependency;
+- no private data dependency;
+- no memory content dependency;
+- provider boundary preserved;
+- no financial provider required for startup.
+
+Notes:
+
+1. **Resolver must not become an intelligent decision engine.**
+
+   `ContextResolver` should find and invoke appropriate providers. It must not judge domain truth, analyze financial markets, or generate investment conclusions.
+
+   ```text
+   Resolver = provider routing / boundary coordination
+   Resolver ≠ domain reasoning engine
+   ```
+
+2. **Planner must remain context planning, not agent reasoning.**
+
+   `ContextPlanner` should decide which ContextBlocks are needed. It must not decide how Julia should answer the user or produce domain conclusions.
+
+   ```text
+   Planner = context need planning
+   Planner ≠ final answer reasoning
+   ```
+
+Recommended next phase:
+
+```text
+A2.1.5 — Core Independence Verification
+```
+
+Objective:
+
+```text
+Prove Julia Core Context OS can run as an independent unit with no domain installed, with mock providers only, and with provider replacement semantics.
+```
