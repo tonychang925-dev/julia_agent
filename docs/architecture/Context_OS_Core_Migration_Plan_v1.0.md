@@ -564,3 +564,46 @@ docs/architecture/Context_OS_Core_Migration_Plan_v1.0.md
 
 No runtime file should be changed in A2.0.
 
+
+## 14. Approval Notes
+
+Decision:
+
+```text
+APPROVED WITH NOTES
+```
+
+Approved:
+
+- Context OS single ownership;
+- dependency direction from Julia Core to Domain Provider Interface;
+- ContextRequest as demand signal;
+- ContextBlock as facts/evidence/capability-result candidate;
+- Domain Provider boundary;
+- rejection of Financial Context OS;
+- migration safety rules;
+- rollback strategy;
+- documentation-only scope.
+
+Notes:
+
+1. **ContextBlock must not become hidden Memory.**
+
+   `ContextBlock` belongs to session/context lifecycle. It may expire, refresh, be excluded, or be re-projected. It is not long-term Memory and must not silently persist as Memory.
+
+   ```text
+   ContextBlock = session/model-facing context candidate
+   Memory       = governed long-term persisted knowledge
+   ```
+
+2. **Context OS does not judge domain truth.**
+
+   Context OS organizes, selects, budgets, projects, and traces context. It does not decide whether a financial, medical, or coding fact is domain-correct. Domain truth and evidence validity remain the responsibility of Domain Providers and their evidence authority mechanisms.
+
+Recommended next phase:
+
+```text
+A2 — Context OS Core Migration
+```
+
+Implementation should remain test-first and should be split if the full `runtime/context_os/` migration is too large for one reviewable PR.
