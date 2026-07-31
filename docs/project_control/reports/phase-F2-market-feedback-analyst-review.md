@@ -106,3 +106,29 @@ CloseValidationSummary
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 7. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- F2 成功引入 Analyst Feedback Loop：`Research -> Truth -> Evaluation -> Error Attribution -> Summary`。
+- F2 保持 shadow-only、read/evaluate-only，不交易、不改策略、不写正式 Memory。
+- F0/F1/F2 回归通过，证明 Contract Boundary、Report Layer、Evaluation Layer 兼容。
+- `NOT_TRIGGERED` / `FALSIFIED` 区分已实现，避免将“上涨=正确、下跌=错误”作为低级评价规则。
+- `evaluator_version="deterministic_f2_v1"` 已建立评价逻辑版本化基础。
+
+Merge Notes:
+
+1. **Error Attribution 继续保持结构化**：必须保留 `category`、`dimensions`、`explanation`、`evidence_refs`，不得退化为简单自然语言“判断错误”。
+2. **CloseValidationSummary 不应只存最终分数**：必须保留 `evaluations -> metric calculator -> accuracy` 的可重算链路，避免未来指标公式变化导致历史不可解释。
+3. **F2 仍然禁止进入 Learning Layer**：F2 是 Evaluation Layer，不提前写入 Analyst Performance Memory，不训练模型，不更新策略。
+4. **MarketTruthSnapshot 后续需要独立 Producer**：真实接入应走 `MarketTruthProducer -> MarketTruthSnapshot -> F2 Validator`，不得让 F2 自己查询行情或数据库。
+5. **F2 已具备 F5 输入形态**：Research + Truth + Evaluation + Error 将成为 F5 20-day Shadow Validation 与 Analyst Performance Model 的输入基础。
+
+Recommended next phase:
+
+- **F3 — Tony Review & Analyst Override Layer**
+- Objective: 在 F2 close validation 后引入 Tony Review 与 OverrideLog，让 Tony 能纠正 Julia 的评价、补充人类判断，并形成受治理的 analyst feedback artifact。
+- Core flow: `CloseValidationResult -> Tony Review -> OverrideLog -> Analyst Preference Update Proposal`。
