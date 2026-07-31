@@ -90,3 +90,30 @@
 ### 待验收
 
 请用户选择：`ACCEPT` / `REWORK` / `REQUEST CHANGES` / `APPROVED WITH NOTES`。
+
+## 7. Approval Decision — APPROVED WITH NOTES
+
+Decision: `APPROVED WITH NOTES`
+
+Approval rationale:
+
+- Phase Contract 对齐：通过。
+- Scope 控制：通过。
+- Contract-first / Test-first：通过。
+- Read-only Boundary：通过。
+- EvidenceRef 基础：通过。
+- Repository Hygiene：通过。
+- 可回滚性：通过。
+
+Merge Notes for PR / main history:
+
+1. **保持 Gateway 只读边界**：`ai_theme_client.py` 后续不得直接 import `ai_theme_app.database` 或查询 raw tables；只能通过 Analyst Gateway Contract。
+2. **Contract Versioning**：F1 前建议加入明确 `CONTRACT_VERSION = "0.1"`，覆盖 `FinancialBriefingBundle`、`EvidenceRef`、`InvestmentCase` 等核心 contract。
+3. **EvidenceRef 是长期核心资产**：后续 Market Thesis、InvestmentCase、Research Request 必须保持 `Conclusion -> EvidenceRef -> Source Snapshot` 链路；不得出现 `LLM opinion -> memory`。
+4. **不扩大 F0 功能**：F0 完成不代表 Julia 金融分析师完成；新闻理解、题材推理、股票筛选、InvestmentCase、Memory Learning、Voice Briefing 均属于 F1+。
+5. **PR 合并后打 Tag**：建议合并后创建 `phase-f0-complete` 或 `v0.1.0-financial-contract`，标记 Julia Financial Capability 第一个架构里程碑。
+
+Next recommended phase:
+
+- **F1 — Market Intelligence Read Layer**
+- Objective: 让 Julia 第一次看到真实市场，即通过 `ai_theme_app -> DailyMarketState / Attention Radar / Theme Ranking / W2S Candidate Pool / Risk State -> Julia Morning Analyst Context` 形成真实市场观察层。
